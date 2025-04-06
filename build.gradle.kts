@@ -54,7 +54,7 @@ afterEvaluate {
             create<MavenPublication>("maven") {
                 groupId = "com.m3u.extension"
                 artifactId = "api"
-                version = "1.1"
+                version = "1.2"
 
                 from(components["release"])
             }
