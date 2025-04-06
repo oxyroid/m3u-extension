@@ -1,5 +1,18 @@
-plugins {
-    id("org.gradle.toolchains.foojay-resolver-convention") version "0.8.0"
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        google()
+        mavenCentral()
+        maven("https://plugins.gradle.org/m2/")
+    }
+}
+dependencyResolutionManagement {
+    repositories {
+        google()
+        mavenCentral()
+        maven("https://jitpack.io")
+        maven("https://plugins.gradle.org/m2/")
+    }
 }
 rootProject.name = "m3u-extension-api"
 
