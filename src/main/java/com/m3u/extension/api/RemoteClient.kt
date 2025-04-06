@@ -49,12 +49,10 @@ class RemoteClient {
         context: Context,
         targetPackageName: String,
         targetClassName: String,
-        targetPermission: String,
         accessKey: String
     ) {
         Log.d(TAG, "connect")
         val intent = Intent().apply {
-            action = targetPermission
             component = ComponentName(targetPackageName, targetClassName)
             putExtra(CallTokenConst.ACCESS_KEY, accessKey)
         }
