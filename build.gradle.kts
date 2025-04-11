@@ -36,6 +36,7 @@ android {
     publishing {
         singleVariant("release") {
             withSourcesJar()
+            withJavadocJar()
         }
     }
 }
@@ -67,7 +68,7 @@ dependencies {
     implementation(libs.androidx.appcompat)
 
     // wire
-    implementation("com.squareup.wire:wire-runtime:4.9.2")
+    implementation(libs.wire.runtime)
 
     // reflect
     api(libs.org.jetbrains.kotlin.kotlin.reflect)
