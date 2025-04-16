@@ -1,7 +1,7 @@
 plugins {
-    alias(libs.plugins.com.android.library)
-    alias(libs.plugins.org.jetbrains.kotlin.android)
-    alias(libs.plugins.org.jetbrains.kotlin.serialization)
+    id("com.android.library") version "8.9.1"
+    id("org.jetbrains.kotlin.android") version "2.1.20"
+    id("org.jetbrains.kotlin.plugin.serialization") version "2.1.20"
     id("com.squareup.wire") version "5.3.1"
     id("maven-publish")
 }
@@ -55,7 +55,7 @@ afterEvaluate {
             create<MavenPublication>("maven") {
                 groupId = "com.m3u.extension"
                 artifactId = "api"
-                version = "1.5"
+                version = "1.7"
 
                 from(components["release"])
             }
@@ -63,13 +63,12 @@ afterEvaluate {
     }
 }
 
+//noinspection UseTomlInstead
 dependencies {
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
-
+    // kotlinx-coroutines
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
     // wire
-    implementation(libs.wire.runtime)
-
+    implementation("com.squareup.wire:wire-runtime:5.3.1")
     // reflect
-    api(libs.org.jetbrains.kotlin.kotlin.reflect)
+    api("org.jetbrains.kotlin:kotlin-reflect:2.1.20")
 }
