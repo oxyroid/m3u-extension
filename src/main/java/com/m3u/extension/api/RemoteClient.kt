@@ -6,7 +6,7 @@ import android.content.Intent
 import android.content.ServiceConnection
 import android.os.IBinder
 import android.util.Log
-import com.m3u.extension.api.Utils.getRealParameterizedType
+import com.squareup.wire.ProtoAdapter
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.runBlocking
@@ -64,10 +64,8 @@ class RemoteClient {
         _isConnectedObservable.value = false
     }
 
-    /**
-     * @hide
-     */
-    suspend fun call(
+    @PublishedApi
+    internal suspend fun call(
         module: String,
         method: String,
         param: ByteArray
@@ -92,7 +90,8 @@ class RemoteClient {
     }
 
     // Map<type-name, adapter>
-    val adapters = mutableMapOf<String, Any>()
+    @PublishedApi
+    internal val adapters = mutableMapOf<Class<*>, ProtoAdapter<Any>>()
 
     @Suppress("UNCHECKED_CAST")
     inline fun <reified P> create(): P {
@@ -116,18 +115,18 @@ class RemoteClient {
                             ByteArray(0)
                         } else {
                             // param type
-                            val adapter = adapters.getOrPut(args[0]::class.java.typeName) {
-                                Utils.getAdapter(args[0]::class.java.typeName)
+                            val type = args[0]::class.java
+                            val adapter = adapters.getOrPut(type) {
+                                ProtoAdapter.get(type) as ProtoAdapter<Any>
                             }
-                            Utils.encode(adapter, args[0])
+                            adapter.encode(args[0])
                         }
-                        val returnType =
-                            (parameters.last().getRealParameterizedType() as Class<*>).name
+                        val returnType = parameters.last().getRealParameterizedType() as Class<*>
                         val adapter = adapters.getOrPut(returnType) {
-                            Utils.getAdapter(returnType)
+                            ProtoAdapter.get(returnType) as ProtoAdapter<Any>
                         }
                         val response = call(moduleName, methodName, bytes)
-                        Utils.decode(adapter, response)
+                        adapter.decode(response)
                     }
                     (block as (Continuation<Any>) -> Any)(continuation) // R | COROUTINE_SUSPENDED
                 }
@@ -137,17 +136,18 @@ class RemoteClient {
                         ByteArray(0)
                     } else {
                         // param type
-                        val adapter = adapters.getOrPut(args[0]::class.java.typeName) {
-                            Utils.getAdapter(args[0]::class.java.typeName)
+                        val type = args[0]::class.java
+                        val adapter = adapters.getOrPut(type) {
+                            ProtoAdapter.get(type) as ProtoAdapter<Any>
                         }
-                        Utils.encode(adapter, args[0])
+                        adapter.encode(args[0])
                     }
-                    val returnType = (parameters.last().getRealParameterizedType() as Class<*>).name
+                    val returnType = parameters.last().getRealParameterizedType() as Class<*>
                     val adapter = adapters.getOrPut(returnType) {
-                        Utils.getAdapter(returnType)
+                        ProtoAdapter.get(returnType) as ProtoAdapter<Any>
                     }
                     val response = runBlocking { call(moduleName, methodName, bytes) }
-                    Utils.decode(adapter, response)
+                    adapter.decode(response)
                 }
             }
         } as P
