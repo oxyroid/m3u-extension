@@ -23,11 +23,6 @@ class InheritedOverrideSymbolProcessor(private val logger: KSPLogger) : SymbolPr
 
     @OptIn(KspExperimental::class)
     override fun process(resolver: Resolver): List<KSAnnotated> {
-        resolver.getSymbolsWithAnnotation(qualifiedName)
-            .filterIsInstance<KSAnnotation>()
-            .forEach {
-                resolver
-            }
         val allAnnotated = resolver
             .getSymbolsWithAnnotation(qualifiedName)
             .filterIsInstance<KSFunctionDeclaration>()

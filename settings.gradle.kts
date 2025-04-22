@@ -19,4 +19,3 @@ rootProject.name = "m3u-extension"
 include(":api")
 include(":annotation")
 include(":processor")
-
