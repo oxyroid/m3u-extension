@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+package com.m3u.extension.api.model;
+
+import "com/m3u/extension/api/model/Channel.proto";
+
+message ObtainChannelsResponse {
+  repeated Channel channels = 1;
+}

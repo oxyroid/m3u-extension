@@ -14,5 +14,9 @@ dependencyResolutionManagement {
         maven("https://plugins.gradle.org/m2/")
     }
 }
-rootProject.name = "m3u-extension-api"
+rootProject.name = "m3u-extension"
+
+include(":api")
+include(":annotation")
+include(":processor")
 
